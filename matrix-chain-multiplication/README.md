@@ -1,0 +1,1 @@
+**Matrix chain multiplication** is an optimization problem concerning the most efficient way to multiply a given sequence of matrices.  The problem may be solved using dynamic programming.
