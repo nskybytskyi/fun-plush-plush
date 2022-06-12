@@ -19,6 +19,14 @@ struct matrix {
       }
     }
   }
+
+  std::vector<int>& operator[](int row) {
+    return data[row];
+  }
+
+  const std::vector<int>& operator[](int row) const {
+    return data[row];
+  }
 };
 
 std::istream& operator>>(std::istream& is, matrix& mat) {

@@ -3,6 +3,7 @@ using namespace std;
 
 #include "matrix.hpp"
 
+namespace internal {
 struct glue {
   vector<matrix*> args;
 
@@ -20,7 +21,7 @@ struct glue {
   vector<int> find_order() const {
     auto n = args.size();
 
-    vector<vector<int>> dp(n, vector<int>(n, 1e9));
+    vector<vector<int64_t>> dp(n, vector<int64_t>(n, numeric_limits<int64_t>::max()));
     vector<vector<int>> last(n, vector<int>(n));
 
     for (int i = 0; i < n; ++i) {
@@ -68,12 +69,12 @@ struct glue {
 
       auto lhs = lhs_it->second, rhs = rhs_it->second;
 
-      auto a = lhs->data.size(), b = lhs->data[0].size(), c = rhs->data[0].size();
+      auto a = lhs->data.size(), b = (*lhs)[0].size(), c = (*rhs)[0].size();
       auto product = new matrix(a, c);
       for (int i = 0; i < a; ++i) {
         for (int j = 0; j < c; ++j) {
           for (int k = 0; k < b; ++k) {
-            product->data[i][j] += lhs->data[i][k] * rhs->data[k][j];
+            (*product)[i][j] += (*lhs)[i][k] * (*rhs)[k][j];
           }
         }
       }
@@ -87,10 +88,11 @@ struct glue {
   }
 };
 
-glue operator*(matrix& lhs, matrix& rhs) {
-  return glue(&lhs, &rhs);
-}
-
 glue operator*(glue lhs, matrix& rhs) {
   return glue(lhs.args, &rhs);
+}
+}  // namespace internal
+
+internal::glue operator*(matrix& lhs, matrix& rhs) {
+  return internal::glue(&lhs, &rhs);
 }

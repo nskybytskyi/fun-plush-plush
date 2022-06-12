@@ -25,7 +25,7 @@ int main() {
   auto product = matrices[0] * matrices[1];
 
   #ifdef OPTIMAL
-    // `product` has an internal type `glue`
+    // `product` has type `internal::glue`
     assert(typeid(product) != typeid(matrices[0]));
   #else
     assert(typeid(product) == typeid(matrices[1]));
