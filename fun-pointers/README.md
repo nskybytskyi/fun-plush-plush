@@ -1,4 +1,4 @@
-Étude 1. "Overload me if you can". `T[]` is equivalent to `T*` in function declarations.
+Étude 1. "Overload me if you can". `T[]` decays to `T*` in function declarations.
 
 `overload_me_if_you_can.hpp`:
 
