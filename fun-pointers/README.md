@@ -37,3 +37,38 @@ static_assert(array_size_detective(arr) == 5);
 ```
 
 No more `sizeof(arr)/sizeof(arr[0])`!
+
+Étude 3. "Dangling `decltype(auto)`". When applied to an lvalue-expression more complicated than a name, `decltype(auto)` returns an lvalue, potentially leading to undefined behavior.
+
+`dangling_decltype_auto.cpp`:
+
+```cpp
+#include <cassert>
+
+decltype(auto) dangling_decltype_auto() {
+  int x = 42;
+  return (x);
+}
+
+int main() {
+  auto x = dangling_decltype_auto();
+  int y = 0;
+  assert(x == 17);
+}
+```
+
+`$ g++ -std=c++17 dangling_decltype_auto.cpp -o a`:
+
+```cpp
+dangling_decltype_auto.cpp:5:11: warning: reference to stack memory associated with local variable 'x' returned [-Wreturn-stack-address]
+  return (x);
+          ^
+1 warning generated.
+```
+
+`$ ./a`
+
+```
+Assertion failed: (x == 17), function main, file dangling_decltype_auto.cpp, line 11.
+zsh: abort      ./a
+```
